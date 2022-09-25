@@ -1,10 +1,11 @@
 import { createWebHistory, createRouter } from "vue-router";
 
-// import LoginPage from '../components/LoginPage.vue';
-// import RegisterPage from '../components/RegisterPage.vue';
-// import DashboardPage from '../components/RegisterPage.vue';
-
 const routes = [
+    {
+        path: "/:pathMatch(.*)*",
+        name: "NotFound",
+        component: () => import('../components/NotFound.vue'),
+    },
     {
         path: "/",
         name: "Login",
@@ -32,7 +33,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     if (to.matched.some((record) => record.meta.requiresAuth)) {
-        if (localStorage.getItem("usertoken")) {
+        if (localStorage.getItem("isAuthorized")) {
             next();
         } else {
             next("/");

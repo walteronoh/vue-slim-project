@@ -38,7 +38,9 @@
 .container main form .submit-btn{
     font-size: x-large;
     font-weight:bold;
+    color: #5f6164;
 }
-/* .input-field {
-    
-} */
+
+.logout-btn {
+    cursor: pointer;
+}

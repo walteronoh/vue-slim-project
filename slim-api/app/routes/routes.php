@@ -37,8 +37,9 @@ return function (App $app) {
         $body = $request->getParsedBody();
         $result = $service->loginUser($body['phonenumber'], $body['password']);
         $payload = json_encode($result);
-        $response->getBody()->write($payload);;
-        return $response->withHeader("Access-Control-Allow-Origin", "*");
+        $response->getBody()->write($payload);
+        if ($result->isSuccess) return $response->withStatus(200)->withHeader("Access-Control-Allow-Origin", "*");
+        return $response->withStatus(401)->withHeader("Access-Control-Allow-Origin", "*");
     });
 
     // Register Api
@@ -48,7 +49,8 @@ return function (App $app) {
         $result = $service->registerUser($body['firstname'], $body['lastname'], $body['phonenumber'], $body['password']);
         $payload = json_encode($result);
         $response->getBody()->write($payload);
-        return $response;
+        if ($result->isSuccess) return $response->withStatus(201)->withHeader("Access-Control-Allow-Origin", "*");
+        return $response->withStatus(400)->withHeader("Access-Control-Allow-Origin", "*");
     });
 
     // Create users table

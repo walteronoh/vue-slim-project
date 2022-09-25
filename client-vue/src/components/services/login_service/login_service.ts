@@ -12,15 +12,23 @@ const LoginService = async (args: LoginServiceTypes) => {
         body: body,
     });
 
+    const result = await response.json();
+
     if (response.status == 200) {
+        console.log(result.body);
+        // Store values in local storage
+        localStorage.setItem('isAuthorized', 'Ok');
+        localStorage.setItem('firstname', result.body[0].firstname);
+        localStorage.setItem('lastname', result.body[0].firstname);
+        localStorage.setItem('phonenumber', result.body[0].phonenumber);
         return {
             isAuthorized: true,
-            message: 'Login Successful'
+            message: result.message
         }
     }
     return {
         isAuthorized: false,
-        message: response.body
+        message: result.message
     }
 }
 

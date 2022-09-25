@@ -14,15 +14,17 @@ const RegisterService = async (args: RegisterServiceTypes) => {
         body: body,
     });
 
-    if (response.status == 200) {
+    const result = await response.json();
+
+    if (response.status == 201) {
         return {
             isAuthorized: true,
-            message: 'Registration Successful'
+            message: result.message
         }
     }
     return {
         isAuthorized: false,
-        message: response.body
+        message: result.message
     }
 }
 
