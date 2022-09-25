@@ -9,7 +9,9 @@ require __DIR__ . '/../services/services.php';
 return function (App $app) {
     $app->options('/{routes:.*}', function (Request $request, Response $response) {
         // CORS Pre-Flight OPTIONS Request Handler
-        return $response;
+        return $response->withHeader("Access-Control-Allow-Origin", "*")
+            ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+            ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     });
 
     // Homepage
@@ -33,17 +35,17 @@ return function (App $app) {
     $app->post('/login', function (Request $request, Response $response) {
         $service = new Services();
         $body = $request->getParsedBody();
-        $result = $service->loginUser($body['username'],$body['password']);
+        $result = $service->loginUser($body['phonenumber'], $body['password']);
         $payload = json_encode($result);
         $response->getBody()->write($payload);;
-        return $response;
+        return $response->withHeader("Access-Control-Allow-Origin", "*");
     });
 
     // Register Api
     $app->post('/register', function (Request $request, Response $response) {
         $service = new Services();
         $body = $request->getParsedBody();
-        $result = $service->registerUser($body['firstname'], $body['lastname'], $body['username'], $body['password']);
+        $result = $service->registerUser($body['firstname'], $body['lastname'], $body['phonenumber'], $body['password']);
         $payload = json_encode($result);
         $response->getBody()->write($payload);
         return $response;
@@ -54,7 +56,7 @@ return function (App $app) {
         $service = new Services();
         $result = json_encode($service->create_users_table());
         $response->getBody()->write($result);
-        if($response == 'true') return $response->withHeader('Content-Type', 'Application/Json')->withStatus(201);
+        if ($response == 'true') return $response->withHeader('Content-Type', 'Application/Json')->withStatus(201);
         return $response->withHeader('Content-Type', 'Application/Json')->withStatus(400);
     });
 };

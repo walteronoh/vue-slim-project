@@ -3,13 +3,13 @@ require __DIR__ . '/../db/db.php';
 
 class Services  extends SQLiteDB
 {
-    public function loginUser(string $username, string $password)
+    public function loginUser(string $phonenumber, string $password)
     {
-        $query = "Select * From users Where username != '$username'";
+        $query = "Select * From users Where phonenumber = '$phonenumber'";
         try {
             $ex = $this->create_connection()->query($query);
             $result = $ex->fetchAll();
-            if (count($result)) {
+            if (count($result) > 0) {
                 $hashed_password = $result[0]['password'];
                 if(password_verify($password, $hashed_password)) {
                     return true;
@@ -23,11 +23,11 @@ class Services  extends SQLiteDB
         return false;
     }
 
-    public function registerUser(string $firstname, string $lastname, string $username, string $password)
+    public function registerUser(string $firstname, string $lastname, string $phonenumber, string $password)
     {
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-        $query = "Insert into users (firstname, lastname, username, password)
-        Values('$firstname', '$lastname', '$username', '$hashed_password')";
+        $query = "Insert into users (firstname, lastname, phonenumber, password)
+        Values('$firstname', '$lastname', '$phonenumber', '$hashed_password')";
         try {
             $ex = $this->create_connection()->exec($query);
             if ($ex) {
