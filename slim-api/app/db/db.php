@@ -26,6 +26,16 @@ class SQLiteDB
         try {
             $ex = $this->create_connection()->exec($query);
             if ($ex) {
+                // Add user
+                try {
+                    $hashed_password = password_hash("nnnnnnnnnnnnnnnnnnnnnnnnnnn", PASSWORD_DEFAULT);
+                    $query_add_user = "Insert into users (firstname, lastname, phonenumber, password)
+                    Values('test', 'test', '070000000000000000000000', '$hashed_password')";
+                    $this->create_connection()->exec($query_add_user);
+                    return true;
+                } catch (PDOException $e) {
+                    return false;
+                }
                 return true;
             } else {
                 return false; //'$this->create_connection()->errorInfo()';

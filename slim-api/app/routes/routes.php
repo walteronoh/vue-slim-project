@@ -17,7 +17,10 @@ return function (App $app) {
     // Homepage
     $app->get('/', function (Request $request, Response $response) {
         $response->getBody()->write('<h3 style="text-align:center">Slim API</h3>');
-        return $response;
+        return $response->withHeader('Content-Type', 'Application/Json')
+            ->withStatus(200)
+            ->withHeader("Access-Control-Allow-Origin", "*")
+            ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     });
 
     // Get All Users Api
@@ -27,7 +30,7 @@ return function (App $app) {
         $payload = json_encode($result);
         // echo $payload;
         $response->getBody()->write($payload);
-        $response->withHeader('Content-Type', 'Application/Json')->withStatus(200);
+        $response->withHeader('Content-Type', 'Application/Json')->withStatus(200)->withHeader("Access-Control-Allow-Origin", "*");
         return $response;
     });
 
